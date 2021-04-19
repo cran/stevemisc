@@ -1,0 +1,78 @@
+#' Lazily select variables from multiple tables in a relational database
+#'
+#' @description \code{db_lselect()} allows you to select variables from multiple
+#'  tables in an SQL database. It returns a lazy query that combines all the
+#'  variables together into one data frame (as a \code{tibble}). The user can
+#'  choose to run \code{collect()} after this query if they see fit.
+#'
+#' @details This is a wrapper function in which \pkg{purrr} and \pkg{dplyr}
+#' are doing the heavy lifting. The tables in the database are declared as a
+#' character (or character vector). The variables to select are also declared
+#' as a character (or character vector), which are then wrapped in a
+#' \code{one_of()} function within \code{select()} in \pkg{dplyr}.
+#'
+#' @param .data a character vector of the tables in a relational database
+#' @param connection the name of the connection object
+#' @param vars the variables (entered as class "character") to select from the tables in the database
+#' @return Assuming a particular structure to the database, the function returns a
+#'  combined table including all the requested variables from all the tables listed
+#'  in the \code{data} character vector. The returned table will have other attributes
+#'  inherited from how \pkg{dplyr} interfaces with SQL, allowing the user to extract
+#'  some information about the query (e.g. through \code{show_query()}).
+#'
+#' @references Miller, Steven V. 2020. "Clever Uses of Relational (SQL) Databases to Store Your Wider Data (with Some Assistance from \code{dplyr} and \code{purrr})" \url{http://svmiller.com/blog/2020/11/smarter-ways-to-store-your-wide-data-with-sql-magic-purrr/}
+#'
+#' @examples
+#'
+#' \donttest{
+#' library(DBI)
+#' library(RSQLite)
+#' library(dplyr)
+#' library(dbplyr)
+#' set.seed(8675309)
+#'
+#' A <- data.frame(uid = c(1:10),
+#'                 a = rnorm(10),
+#'                 b = sample(letters, 10),
+#'                 c = rbinom(10, 1, .5))
+#'
+#' B <- data.frame(uid = c(11:20),
+#'                 a = rnorm(10),
+#'                 b = sample(letters, 10),
+#'                 c = rbinom(10, 1, .5))
+#'
+#' C <- data.frame(uid = c(21:30), a = rnorm(10),
+#'                 b = sample(letters, 10),
+#'                 c = rbinom(10, 1, .5),
+#'                 d = rnorm(10))
+#'
+#' con <- dbConnect(SQLite(), ":memory:")
+#'
+#' copy_to(con, A, "A",
+#'         temporary=FALSE)
+#'
+#' copy_to(con, B, "B",
+#'         temporary=FALSE)
+#'
+#' copy_to(con, C, "C",
+#'         temporary=FALSE)
+#'
+#' # This returns no warning because columns "a" and "b" are in all tables
+#' c("A", "B", "C") %>% db_lselect(con, c("uid", "a", "b"))
+#'
+#' # This returns two warnings because column "d" is not in 2 of 3 tables.
+#' # ^ this is by design. It'll inform the user about data availability.
+#' c("A", "B", "C") %>% db_lselect(con, c("uid", "a", "b", "d"))
+#' dbDisconnect(con)
+#' }
+
+db_lselect <- function(.data, connection, vars) {
+  return(.data %>%
+           map(~{
+             tbl(connection, .x) %>%
+               select(one_of(vars))
+
+
+           }) %>%
+           reduce(function(x, y) union(x, y)))
+}
