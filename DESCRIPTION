@@ -1,7 +1,7 @@
 Package: stevemisc
 Type: Package
 Title: Steve's Miscellaneous Functions
-Version: 1.0.0
+Version: 1.1.0
 Depends: R (>= 3.6.0), stats
 Authors@R: c(
     person("Steve", "Miller", email = "steven.v.miller@gmail.com",
@@ -27,12 +27,11 @@ BugReports: https://github.com/svmiller/stevemisc/issues
 Encoding: UTF-8
 LazyData: true
 Imports: ggplot2 (>= 3.3.0), magrittr, broom.mixed, labelled, arm,
-        parallel, purrr, tibble, dplyr, methods, lme4, rlang, forcats,
-        DBI, RSQLite, dbplyr
-Suggests: knitr, rmarkdown
+        parallel, purrr, tibble, dplyr, methods, lme4, rlang, forcats
+Suggests: knitr, rmarkdown, DBI, RSQLite, dbplyr
 RoxygenNote: 7.1.1
 NeedsCompilation: no
-Packaged: 2021-04-16 11:10:00 UTC; steve
+Packaged: 2021-06-14 18:00:16 UTC; steve
 Author: Steve Miller [aut, cre],
   Ben Bolker [ctb],
   Dave Armstrong [ctb],
@@ -45,4 +44,4 @@ Author: Steve Miller [aut, cre],
   Paul Williamson [ctb]
 Maintainer: Steve Miller <steven.v.miller@gmail.com>
 Repository: CRAN
-Date/Publication: 2021-04-19 08:20:03 UTC
+Date/Publication: 2021-06-14 18:30:02 UTC
