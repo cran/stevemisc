@@ -9,29 +9,29 @@
 <img src="http://svmiller.com/images/stevemisc-hexlogo.png" alt="My stevemisc hexlogo" align="right" width="200" style="padding: 0 15px; float: right;"/>
 
 `{stevemisc}` is an R package that includes various functions and tools
-that I have written over the years to assist me in my research. I offer
-it here for a public release because 1) I am vain and think I privately
-want an entire, eponymous ecosystem in the R programming language
-(i.e. the “steveverse”) and 2) I think there are tools here that are
-broadly useful for users that I’m trying to bundle with other things
-that I offer (prominently
+that I have written over the years to assist me in my research,
+teaching, and public presentations (i.e. stuff I put on my blog). I
+offer it here for a public release because 1) I am vain and think I want
+an entire, eponymous ecosystem in the R programming language (i.e. the
+“steveverse”) and 2) I think there are tools here that are broadly
+useful for users that I’m trying to bundle with other things that I
+offer (prominently
 [`{steveproj}`](https://github.com/svmiller/steveproj)). Namely,
-`{stevemisc}` offers some tools to assist in data organization, data
+`{stevemisc}` offers tools to assist in data organization, data
 presentation, data recoding, and data simulation. The usage section will
 elaborate some of its uses.
 
 ## Installation
 
-When the time comes, you can install this on CRAN.
+You can install this on CRAN.
 
 ``` r
 install.packages("stevemisc")
 ```
 
-Right now, this package in development and is not available on CRAN. You
-can install the development version of `{stevemisc}` from Github via the
-`{devtools}` package. I suppose using the `{remotes}` package would work
-as well.
+You can install the development version of `{stevemisc}` from Github via
+the `{devtools}` package. I suppose using the `{remotes}` package would
+work as well.
 
 ``` r
 devtools::install_github("svmiller/stevemisc")
@@ -135,16 +135,16 @@ corvectors(cbind(runif(nobs, 0, 100),
 #> # A tibble: 1,000 x 3
 #>     meals colgrad fullqual
 #>     <dbl>   <dbl>    <dbl>
-#>  1 17.9    37.0       98.4
-#>  2 10.5    41.9       96.9
-#>  3 17.0    41.6       89.6
-#>  4 75.5     5.30      61.6
-#>  5 71.6    10.4       98.1
-#>  6 72.0     1.46      91.6
-#>  7 65.3    17.0       82.2
-#>  8 95.2     0.174     89.9
-#>  9  0.100  38.9       98.3
-#> 10  9.58   30.3       93.1
+#>  1 17.9     32.4      98.4
+#>  2 10.5     55.0      99.5
+#>  3 17.0     21.8      94.6
+#>  4 75.5     15.0      79.4
+#>  5 71.6     10.4      68.5
+#>  6 72.0      7.27     91.6
+#>  7 65.3      5.22     74.4
+#>  8 95.2      3.68     78.0
+#>  9  0.100   44.3      98.3
+#> 10  9.58    29.3      93.1
 #> # … with 990 more rows
 ```
 
@@ -374,6 +374,92 @@ p_z(c(.001, .01, .05, .1))
 #> [1] 3.290527 2.575829 1.959964 1.644854
 ```
 
+### `print_refs()`: Print and Format  Entries as References
+
+`print_refs()` takes a `.bib` entry (or entries) and formats it as a
+reference (or set of references). This function is useful if you want to
+populate a syllabus with a reading list and have more agency over how
+it’s formatted.
+
+For example, here’s a list of things you should read and cite, along
+with an illustration of the defaults by which the function works
+(American Political Science Association style, to LaTeX). `stevepubs`,
+in this package, contains an incomplete list of my publications.
+
+Remember: *extremely Smokey Bear voice* “only YOU can jack my *h*-index
+to infinity.”
+
+``` r
+# Note, this function does spam with some messages/warnings.
+# You can disable that in a chunk, as I do here.
+library(bib2df)
+print_refs(capture.output(df2bib(stevepubs)))
+#> Curtis, K. Amber, and Steven V. Miller. 2021. "A (Supra)nationalist
+#> Personality? The Big Five's Effects on Political-Territorial
+#> Identification." \emph{European Union Politics} 22(2): 202--26.
+#> 
+#> Gibler, Douglas M., Marc L. Hutchison, and Steven V. Miller. 2012.
+#> "Individual Identity Attachments and International Conflict: The
+#> Importance of Territorial Threat." \emph{Comparative Political
+#> Studies} 45(12): 1655--83.
+#> 
+#> Gibler, Douglas M., and Steven V. Miller. 2012. "Comparing the Foreign
+#> Aid Policies of Presidents Bush and Obama." \emph{Social Science
+#> Quarterly} 93(5): 1202--17.
+#> 
+#> ---------. 2013. "Quick Victories? Territory, Democracies, and Their
+#> Disputes." \emph{Journal of Conflict Resolution} 57(2): 258--84.
+#> 
+#> ---------. 2014. "External Territorial Threat, State Capacity, and
+#> Civil War." \emph{Journal of Peace Research} 51(5): 634--46.
+#> 
+#> Gibler, Douglas M., Steven V. Miller, and Erin K. Little. 2016. "An
+#> Analysis of the {M}ilitarized {I}nterstate {D}ispute {(MID)} Dataset,
+#> 1816-2001." \emph{International Studies Quarterly} 60(4): 719--30.
+#> 
+#> ---------. 2020. "The Importance of Correct Measurement."
+#> \emph{International Studies Quarterly} 64(2): 476--79.
+#> 
+#> Miller, Steven V. 2013. "Territorial Disputes and the Politics of
+#> Individual Well-Being." \emph{Journal of Peace Research} 50(6):
+#> 677--90.
+#> 
+#> ---------. 2017a. "Economic Threats or Societal Turmoil? Understanding
+#> Preferences for Authoritarian Political Systems." \emph{Political
+#> Behavior} 39(2): 457--78.
+#> 
+#> ---------. 2017b. "Individual-Level Expectations of Executive
+#> Authority Under Territorial Threat." \emph{Conflict Management and
+#> Peace Science} 34(5): 526--45.
+#> 
+#> ---------. 2017c. "The Effect of Terrorism on Judicial Confidence."
+#> \emph{Political Research Quarterly} 70(4): 790--802.
+#> 
+#> ---------. 2018. "External Territorial Threats and Tolerance of
+#> Corruption: A Private/Government Distinction." \emph{Peace Economics,
+#> Peace Science and Public Policy} 24(1).
+#> 
+#> ---------. 2019. "What Americans Think about Gun Control: Evidence
+#> from the General Social Survey, 1972-2016." \emph{Social Science
+#> Quarterly} 100(1): 272--88.
+#> 
+#> ---------. "Economic Anxiety or Ethnocentrism? An Evaluation of
+#> Attitudes Toward Immigration in the {U.S.} From 1992 to 2017."
+#> \emph{The Social Science Journal}.
+#> 
+#> Miller, Steven V., and Nicholas T. Davis. 2021. "The Effect of White
+#> Social Prejudice on Support for American Democracy." \emph{Journal of
+#> Race, Ethnicity, and Politics} 6(2): 334--51.
+#> 
+#> Miller, Steven V., and Doublas M. Gibler. 2011. "Democracies,
+#> Territory, and Negotiated Compromises." \emph{Conflict Management and
+#> Peace Science} 28(3): 261--79.
+#> 
+#> Miller, Steven V., Jaroslav Tir, and John A. Vasquez. 2020.
+#> "Geography, Territory, and Conflict." In \emph{Oxford Research
+#> Encyclopedia of International Studies}, Oxford University Press.
+```
+
 ### `r1sd()` and `r2sd()`: Rescaling Data by One (or Two) Standard Deviations
 
 `r1sd()` and `r2sd()` allow the user to rescale data by one or two
@@ -412,6 +498,33 @@ r2sd(x)
 #> [49]  0.07849921 -0.03873503
 ```
 
+## `r2sd_at()`: Rescale Multiple Columns by Two Standard Deviations (and Rename)
+
+`r2sd_at()` is a wrapper for `mutate_at()` and `rename_at()` in
+`{dplyr}`. It both rescales the supplied vectors to new vectors and
+renames the vectors to all have a prefix of `z_`. This is my preferred
+convention for these things.
+
+``` r
+mtcars %>% tbl_df() %>%
+  select(mpg, disp, hp) %>%
+  r2sd_at(c("mpg", "hp", "disp"))
+#> # A tibble: 32 x 6
+#>      mpg  disp    hp   z_mpg   z_hp  z_disp
+#>    <dbl> <dbl> <dbl>   <dbl>  <dbl>   <dbl>
+#>  1  21    160    110  0.0754 -0.268 -0.285 
+#>  2  21    160    110  0.0754 -0.268 -0.285 
+#>  3  22.8  108     93  0.225  -0.392 -0.495 
+#>  4  21.4  258    110  0.109  -0.268  0.110 
+#>  5  18.7  360    175 -0.115   0.206  0.522 
+#>  6  18.1  225    105 -0.165  -0.304 -0.0231
+#>  7  14.3  360    245 -0.480   0.717  0.522 
+#>  8  24.4  147.    62  0.358  -0.618 -0.339 
+#>  9  22.8  141.    95  0.225  -0.377 -0.363 
+#> 10  19.2  168.   123 -0.0739 -0.173 -0.255 
+#> # … with 22 more rows
+```
+
 ### `ps_btscs()` and `sbtscs()`: Create “Peace Years” or “Spells” by Cross-Sectional Unit
 
 `sbtscs()` allows you to create spells (“peace years” in the
@@ -430,7 +543,8 @@ with it, the `usa_mids` data frame that has all militarized interstate
 disputes for the United States in non-directed dyad-year form from the
 Gibler-Miller-Little (“GML”) data. `ps_btscs()` is a more general
 version of `sbtscs()` that performs well when NAs bracket the event
-data.
+data. The latter function features prominently in
+[`{peacesciencer}`](https://github.com/svmiller/peacesciencer).
 
 ``` r
 # ?usa_mids
@@ -469,6 +583,37 @@ sbtscs(usa_mids, midongoing, year, dyad)
 #> # … with 14,576 more rows
 ```
 
+### `revcode()`: Reverse Code a Numeric Variable (i.e. Invert the Scale)
+
+`revcode()` allows you to reverse code a numeric variable. This is
+useful, say, if you have a Likert item that ranges from 1 (“strongly
+disagree”) to 5 (“strongly agree”), but wants the 5s to be “strongly
+disagree” and the 1s to be “strongly agree.” This function passes over
+NAs you may have in your variable. It assumes that the observed values
+include both the minimum and the maximum and that the increments between
+them are 1. This is usually the case in a discrete ordered-categorical
+variable (like a Likert item). Use this function with that in mind.
+
+``` r
+tibble(x = c(1:10),
+       y = c(1:5, 1:5)) %>%
+  mutate(xrev = revcode(x),
+         yrev = revcode(y))
+#> # A tibble: 10 x 4
+#>        x     y  xrev  yrev
+#>    <int> <int> <dbl> <dbl>
+#>  1     1     1    10     5
+#>  2     2     2     9     4
+#>  3     3     3     8     3
+#>  4     4     4     7     2
+#>  5     5     5     6     1
+#>  6     6     1     5     5
+#>  7     7     2     4     4
+#>  8     8     3     3     3
+#>  9     9     4     2     2
+#> 10    10     5     1     1
+```
+
 ### `show_ranef()`: Get a Caterpillar Plot of the Random Effects from a Mixed Model
 
 `show_ranef()` allows a user estimating a mixed model to quickly plot
@@ -491,13 +636,13 @@ M1 <- lmer(Reaction ~ Days + (Days | Subject), data=sleepstudy)
 show_ranef(M1, "Subject")
 ```
 
-<img src="man/figures/README-unnamed-chunk-13-1.png" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-16-1.png" width="80%" style="display: block; margin: auto;" />
 
 ``` r
 show_ranef(M1, "Subject", reorder=FALSE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-13-2.png" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-16-2.png" width="80%" style="display: block; margin: auto;" />
 
 ### `smvrnorm()`: Simulate from a Multivariate Normal Distribution
 
@@ -539,7 +684,7 @@ as_tibble(smvrnorm(1000, coef(M1), vcov(M1)))
 #> # … with 990 more rows
 ```
 
-### `theme_steve()`, `theme_steve_web()`: Steve’s Preferred `{ggplot2}` Themes
+### `theme_steve()`, `theme_steve_web()`, `theme_steve_ms()`: Steve’s Preferred `{ggplot2}` Themes
 
 `theme_steve()` was a preferred theme of mine a few years ago. It is
 basically `theme_bw()` from `{ggplot2}` theme, but with me tweaking a
@@ -547,7 +692,10 @@ few things. I’ve since moved to `theme_steve_web()` for most things now,
 prominently on my website. It incorporates the “Open Sans” and
 “Titillium Web” fonts that I like so much. `post_bg()` is for changing
 the backgrounds on plots to better match my website for posts that I
-write.
+write. `theme_steve_ms()` is a new addition that uses [the “Crimson
+Text” font](https://fonts.google.com/specimen/Crimson+Text) to match my
+plots to my LaTeX manuscripts. For those unaware, “Crimson Text” is
+basically what [`cochineal`](https://ctan.org/pkg/cochineal?lang=en) is.
 
 ``` r
 mtcars %>%
@@ -558,7 +706,7 @@ mtcars %>%
        subtitle = "It's basically `theme_bw()` with some minor tweaks.")
 ```
 
-<img src="man/figures/README-unnamed-chunk-15-1.png" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-18-1.png" width="80%" style="display: block; margin: auto;" />
 
 ``` r
 mtcars %>%
@@ -569,11 +717,33 @@ mtcars %>%
        subtitle = "I use `theme_steve_web()` for most things. It has nicer fonts.")
 ```
 
-<img src="man/figures/README-unnamed-chunk-15-2.png" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-18-2.png" width="80%" style="display: block; margin: auto;" />
+
+``` r
+mtcars %>%
+  ggplot(.,aes(mpg, hp)) +
+  geom_point() +
+  theme_steve_ms() +
+  labs(title = "A Plot with Steve's Preferred {ggplot2} Theme",
+       subtitle = "I use `theme_steve_ms()` will not look pretty in this application, but will in LaTeX.")
+```
+
+<img src="man/figures/README-unnamed-chunk-18-3.png" width="80%" style="display: block; margin: auto;" />
+
+``` r
+mtcars %>%
+  ggplot(.,aes(mpg, hp)) +
+  geom_point() +
+  theme_steve_font(font = "Comic Sans MS") +
+  labs(title = "A Plot with Steve's Preferred {ggplot2} Theme",
+       subtitle = "I use `theme_steve_font()` for the occasional document that uses Palatino type fonts. Here: it's Comic Sans.")
+```
+
+<img src="man/figures/README-unnamed-chunk-18-4.png" width="80%" style="display: block; margin: auto;" />
 
 ### The Student-t Distribution (Location-Scale Version)
 
-Finally, i added a few functions for extending the “standard”
+Finally, I added a few functions for extending the “standard”
 t-distribution in R into the three-parameter “location-scale” version.
 This generalizes the Student-t and is useful for getting acclimated with
 more general Student-t distributions, which are quite common in Bayesian
@@ -581,18 +751,18 @@ analyses. `dst()` (density), `pst()` (distribution function), `qst()`
 (quantile), and `rst()` (random number generation) are available. Here,
 for example, is using `rst()` to simulate data from one of the most
 common Student-t distributions in the world of Bayesian priors: the one
-with three degrees of freedom, a mean of 0, and a standard deviation of
-1.
+with three degrees of freedom, a mean of zero, and a standard deviation
+of ten.
 
 ``` r
-dat <- tibble(x = rst(10000, 3, 0, 1))
+dat <- tibble(x = rst(10000, 3, 0, 10))
 
 dat %>%
   ggplot(.,aes(x)) +
   geom_density() +
   theme_steve_web() +
-  labs(title = "Simulated Data from a Student-t (3,0,1) Distribution",
-       subtitle = "This prior is very common in the world of Bayesian priors.")
+  labs(title = "Simulated Data from a Student-t (3,0,10) Distribution",
+       subtitle = "This prior is common in the world of Bayesian priors and used to be a common default prior in {brms}.")
 ```
 
-<img src="man/figures/README-unnamed-chunk-16-1.png" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-19-1.png" width="80%" style="display: block; margin: auto;" />
