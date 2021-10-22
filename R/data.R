@@ -22,7 +22,7 @@
 #' These are data on my publications, barring a few things like book reviews and some forthcoming pieces.
 #' I use these data to illustrate the \code{print_refs()} function. You should cite my publications more.
 #'
-#' @format A data frame the following 14 variables.
+#' @format A data frame with the following 14 variables.
 #' \describe{
 #' \item{\code{CATEGORY}}{the entry type}
 #' \item{\code{BIBTEXKEY}}{the unique entry key}
@@ -41,3 +41,101 @@
 #' @details Cite my publications more, you goons. *Extremely Smokey Bear voice* Only YOU can jack my h-index to infinity.
 
 "stevepubs"
+
+
+#' French Leader-Years, 1874-2015
+#'
+#' These are data generated in \pkg{peacesciencer} for all French leader-years from 1874 to 2015. I'm going to use
+#' these data for stress-testing the calculation of so-called "peace spells" for data that are decidedly imbalanced,
+#' as these are.
+#'
+#' @format A data frame with 255 observations on the following 10 variables.
+#' \describe{
+#' \item{\code{obsid}}{the unique observation ID in the Archigos data}
+#' \item{\code{ccode}}{the Correlates of War state code for France (220)}
+#' \item{\code{leader}}{a name---typically last name---for the leader}
+#' \item{\code{year}}{an observation year for the leader}
+#' \item{\code{startdate}}{the start date for the leader's period in office}
+#' \item{\code{enddate}}{the end date for the leader's period in office}
+#' \item{\code{gmlmidongoing}}{was there an ongoing inter-state dispute for the leader?}
+#' \item{\code{gmlmidonset}}{was there a new inter-state dispute onset for the leader?}
+#' \item{\code{gmlmidongoing_init}}{was there an ongoing inter-state dispute for the leader that the leader initiated?}
+#' \item{\code{gmlmidonset_init}}{was there a new inter-state dispute onset for the leader that the leader initiated?}
+#' }
+#'
+#' @details
+#'
+#' Data are generated in the development version (scheduled release of v. 0.7) of \pkg{peacesciencer}. Conflict data
+#' come from the GML MID data (v. 2.2.1). Leader data come from Archigos (v. 4.1).
+#'
+#' @references
+#'
+#' Goemans, Henk E., Kristian Skrede Gleditsch, and Giacomo Chiozza. 2009. "Introducing Archigos: A Dataset of Political Leaders"
+#' \emph{Journal of Peace Research} 46(2): 269--83.
+#'
+#' Gibler, Douglas M., Steven V. Miller, and Erin K. Little. 2016. “An Analysis of the Militarized
+#' Interstate Dispute (MID) Dataset, 1816-2001.” International Studies Quarterly 60(4): 719-730.
+
+"fra_leaderyears"
+
+
+#' German Dyad-Years, 1816-2020
+#'
+#' These are data generated in \pkg{peacesciencer} for all German (and Prussian) dyad-years from 1816 to 2020. These
+#' are going to be useful in stress-testing what "peace spell" calculations may look like when there is a huge gap
+#' in between years. In the Correlates of War context, Germany disappears from the international system from 1945 to 1990. It'll
+#' also serve as a nice test for making sure spell calculations don't misbehave in the context of missing data. In this application,
+#' there are no data for disputes between 2011 and 2020, but the dyad-years include 2011 to 2020.
+#'
+#' @format A data frame with 11174 observations on the following 6 variables.
+#' \describe{
+#' \item{\code{dyad}}{a unique identifier for the dyad}
+#' \item{\code{ccode1}}{the Correlates of War state code for Germany (255)}
+#' \item{\code{ccode2}}{the Correlates of War state code for the other state in the dyad}
+#' \item{\code{year}}{an observation year for the dyad}
+#' \item{\code{gmlmidongoing}}{was there an ongoing inter-state dispute in the dyad-year?}
+#' \item{\code{gmlmidonset}}{was there a new inter-state dispute onset in the dyad-year}
+#' }
+#'
+#' @details
+#'
+#' Data are generated in the development version (scheduled release of v. 0.7) of \pkg{peacesciencer}. Conflict data
+#' come from the GML MID data (v. 2.2.1).
+#'
+#' @references
+#'
+#' Gibler, Douglas M., Steven V. Miller, and Erin K. Little. 2016. “An Analysis of the Militarized
+#' Interstate Dispute (MID) Dataset, 1816-2001.” International Studies Quarterly 60(4): 719-730.
+
+"gmy_dyadyears"
+
+
+
+#' United States Militarized Interstate Disputes (MIDs)
+#'
+#' This is a non-directed dyad-year data set for militarized interstate disputes involving
+#' the United States. I created these to illustrate the \code{sbtscs()} function.
+#'
+#' @format A data frame with 14586 observations on the following 6 variables.
+#' \describe{
+#' \item{\code{dyad}}{a unique identifier for the dyad}
+#' \item{\code{ccode1}}{the Correlates of War state code for the United States (2)}
+#' \item{\code{ccode2}}{the Correlates of War state code for the other state in the dyad}
+#' \item{\code{year}}{an observation year for the dyad}
+#' \item{\code{midongoing}}{was there an ongoing inter-state dispute in the dyad-year?}
+#' \item{\code{midonset}}{was there a new inter-state dispute onset in the dyad-year}
+#' }
+#'
+#' @details
+#'
+#' Data were generated some time ago. Rare cases where there were multiple disputes ongoing
+#' in a given dyad-year were first whittled by isolating 1) unique dispute onsets. Thereafter,
+#' the data select the 2) highest fatality, then 3) the highest hostility level, and then 4)
+#' the longer dispute, until 5) just picking whichever one came first. There are no duplicate non-directed dyad-year observations.
+#'
+#' @references
+#'
+#' Gibler, Douglas M., Steven V. Miller, and Erin K. Little. 2016. “An Analysis of the Militarized
+#' Interstate Dispute (MID) Dataset, 1816-2001.” International Studies Quarterly 60(4): 719-730.
+
+"usa_mids"
