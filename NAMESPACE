@@ -12,7 +12,6 @@ importFrom(stats, "coef", "cor", "dnorm", "dt", "model.matrix",
                 "sd", "terms", "var")
 
 # this is for `show_ranef()` to work without complaints
-importFrom(broom.mixed, "augment")
 importFrom(lme4, "ranef")
 
 # This is for `corvectors()` to work without complaints
@@ -90,7 +89,6 @@ importFrom(grid,unit)
 #importFrom(dbplyr, union)
 
 # This is for print_refs()
-
 importFrom(httr, "GET", "write_disk", "http_error", "status_code")
 #importFrom(rmarkdown, "find_pandoc", "pandoc", "with_pandoc_safe_environment")
 import(rmarkdown)
@@ -101,3 +99,15 @@ importFrom(tools, "file_ext")
 importFrom(tidyr, "gather")
 importFrom(ggplot2, "facet_wrap")
 importFrom(stats, "model.frame")
+
+# This is for filter_refs()
+importFrom(bib2df, "df2bib")
+importFrom("utils", "capture.output")
+
+# This is for binred_plot()
+importFrom(stats, "nobs")
+
+# This is for sbayesboot()
+
+importFrom("stats", "complete.cases", "update", "rexp")
+importFrom(tidyr, "unite")

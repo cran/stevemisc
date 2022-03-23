@@ -1,37 +1,47 @@
-#' Create multivariate data by permutation
+#' Recode a Variable
 #'
-#' @description This recodes a numeric vector, character vector, or factor according to fairly
-#' simple recode specifications that former Stata users will appreciate. Yes, this is taken
-#' from John Fox's \code{recode()} function in his \pkg{car} package. I'm going with \code{carrec()}
-#' (i.e. shorthand for \code{car::recode()}, phonetically here: "car-wreck")
-#' for this package, with an additional shorthand of \code{carr} that does the same thing.
+#' @description This recodes a numeric vector, character vector, or factor
+#' according to fairly simple recode specifications that former Stata users
+#' will appreciate. Yes, this is taken from John Fox's `recode()` unction in
+#' his \pkg{car} package. I'm going with `carrec()` (i.e. shorthand for
+#' `car::recode()`, phonetically here: "car-wreck") for this package, with
+#' an additional shorthand of `carr` that does the same thing.
 #'
-#' The goal here is to minimize the number of function clashes with multiple packages
-#' that I use in my workflow. For example: \pkg{car}, \pkg{dplyr}, and \pkg{Hmisc}
-#' all have \code{recode()} functions. I rely on the \pkg{car} package just for this function,
-#' but it conflicts with some other \pkg{tidyverse} functions that are vital to my workflow.
+#' The goal here is to minimize the number of function clashes with
+#' multiple packages that I use in my workflow. For example: \pkg{car},
+#' \pkg{dplyr}, and \pkg{Hmisc} all have `recode()` functions. I rely on
+#' the \pkg{car} package just for this function, but it conflicts with some
+#' other \pkg{tidyverse} functions that are vital to my workflow.
+#'
+#' @details Recode specifications appear in a character string, separated by
+#' semicolons (see the examples below), of the form input=output. If an input
+#' value satisfies more than one specification, then the first (from left to
+#' right) applies. If no specification is satisfied, then the input value is
+#' carried over to the result. NA is allowed on input and output.
+#'
+#' @return `carrec()` returns a vector, recoded to the specifications of the
+#' user. `carr()` is a simple shortcut for`carrec()`.
+#'
+#' @author John Fox
+#'
+#'
+#' @references Fox, J. and Weisberg, S. (2019). \emph{An R Companion to Applied Regression}, Third Edition, Sage.
+#'
 #'
 #' @name carrec
 #'
 #' @param var numeric vector, character vector, or factor
-#' @param recodes character string of recode specifications: see below, but former Stata users will find this stuff familiar
-#' @param as_fac return a factor; default is \code{TRUE} if \code{var} is a factor, \code{FALSE} otherwise
-#' @param as_num if \code{TRUE} (which is the default) and \code{as.factor} is \code{FALSE},
+#' @param recodes character string of recode specifications: see below, but
+#' former Stata users will find this stuff familiar
+#' @param as_fac return a factor; default is `TRUE` if `var` is a
+#' factor,  `FALSE` otherwise
+#' @param as_num if `TRUE` (which is the default) and `as.factor` is `FALSE`,
 #' the result will be coerced to a numeric if all values in the result are numeric.
-#' This should be what you want in 99\% of applications for regression analysis.
-#' @param levels an optional argument specifying the order of the levels in the returned factor; the default is to use the sort order of the level names.
-#' @param ... optional, only to make the shortcut (\code{carr}) work
+#' This should be what you want in 99% of applications for regression analysis.
+#' @param levels an optional argument specifying the order of the levels in the
+#' returned factor; the default is to use the sort order of the level names.
+#' @param ... optional, only to make the shortcut (`carr()`) work
 #'
-#' @return \code{carrec()} returns a vector, recoded to the specifications of the user. \code{carr()} is a simple shortcut for \code{carrec()}.
-#'
-#' @author John Fox
-#'
-#' @details Recode specifications appear in a character string, separated by semicolons
-#' (see the examples below), of the form input=output. If an input value satisfies more than one
-#' specification, then the first (from left to right) applies. If no specification is satisfied,
-#' then the input value is carried over to the result. NA is allowed on input and output.
-#'
-#' @references Fox, J. and Weisberg, S. (2019). \emph{An R Companion to Applied Regression}, Third Edition, Sage.
 #'
 #' @examples
 #' x <- seq(1,10)
@@ -56,35 +66,35 @@ carrec <- function(var, recodes, as_fac, as_num = TRUE, levels) {
         if (0 < length(grep(":", term))) {
             range <- strsplit(strsplit(term, "=")[[1]][1], ":")
             low <- try(eval(parse(text = range[[1]][1])), silent = TRUE)
-            if (class(low) == "try-error") {
+            if (inherits(low, "try-error")) {
                 stop("\n  in recode term: ", term, "\n  message: ", low)
             }
             high <- try(eval(parse(text = range[[1]][2])), silent = TRUE)
-            if (class(high) == "try-error") {
+            if (inherits(high, "try-error")) {
                 stop("\n  in recode term: ", term, "\n  message: ", high)
             }
             target <- try(eval(parse(text = strsplit(term, "=")[[1]][2])),
                           silent = TRUE)
-            if (class(target) == "try-error") {
+            if (inherits(target, "try-error")) {
                 stop("\n  in recode term: ", term, "\n  message: ", target)
             }
             result[(var >= low) & (var <= high)] <- target
         } else if (0 < length(grep("^else=", .squeeze_blanks(term)))) {
             target <- try(eval(parse(text = strsplit(term, "=")[[1]][2])),
                           silent = TRUE)
-            if (class(target) == "try-error") {
+            if (inherits(target, "try-error")) {
                 stop("\n  in recode term: ", term, "\n  message: ", target)
             }
             result[1:length(var)] <- target
         } else {
             set <- try(eval(parse(text = strsplit(term, "=")[[1]][1])),
                        silent = TRUE)
-            if (class(set) == "try-error") {
+            if (inherits(set, "try-error")) {
                 stop("\n  in recode term: ", term, "\n  message: ", set)
             }
             target <- try(eval(parse(text = strsplit(term, "=")[[1]][2])),
                           silent = TRUE)
-            if (class(target) == "try-error") {
+            if (inherits(target, "try-error")) {
                 stop("\n  in recode term: ", term, "\n  message: ", target)
             }
             for (val in set) {
