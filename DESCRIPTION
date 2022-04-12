@@ -1,7 +1,7 @@
 Package: stevemisc
 Type: Package
 Title: Steve's Miscellaneous Functions
-Version: 1.4.0
+Version: 1.4.1
 Depends: R (>= 3.6.0), stats
 Authors@R: c(
     person("Steve", "Miller", email = "steven.v.miller@gmail.com",
@@ -38,11 +38,11 @@ Encoding: UTF-8
 LazyData: true
 Imports: ggplot2 (>= 3.3.0), magrittr, labelled, arm, parallel, purrr,
         tibble, dplyr, methods, lme4, rlang, forcats, stringr, httr,
-        rmarkdown, tidyr, bib2df
+        rmarkdown, tidyr
 Suggests: knitr, DBI, RSQLite, dbplyr
 RoxygenNote: 7.1.2
 NeedsCompilation: no
-Packaged: 2022-03-23 19:17:43 UTC; steve
+Packaged: 2022-04-12 13:38:29 UTC; svmille
 Author: Steve Miller [aut, cre],
   Ben Bolker [ctb],
   Dave Armstrong [ctb],
@@ -58,4 +58,4 @@ Author: Steve Miller [aut, cre],
   Grant McDermott [ctb] (<https://orcid.org/0000-0001-7883-8573>)
 Maintainer: Steve Miller <steven.v.miller@gmail.com>
 Repository: CRAN
-Date/Publication: 2022-03-23 20:20:02 UTC
+Date/Publication: 2022-04-12 14:00:02 UTC
