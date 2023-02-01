@@ -1,23 +1,28 @@
-#' @title Steve's Preferred \pkg{ggplot2} Themes and Assorted Stuff
+#' @title Legacy functions for Steve's Preferred \pkg{ggplot2} Themes and Assorted Stuff
 #'
 #' @description \code{theme_steve()} was a preferred theme of mine a few years ago. It is
 #' basically \code{theme_bw()} from \pkg{ggplot2} theme, but with me
 #' tweaking a few things. I've since moved to \code{theme_steve_web()} for most things
 #' now, prominently on my website. It incorporates the "Open Sans" and "Titillium Web"
-#' fonts that I like so much. \code{post_bg()} is for changing the backgrounds on
-#' plots to better match my website for posts that I write. \code{theme_steve_ms()} is
-#' for \code{LaTeX} manuscripts that use the \code{cochineal} font package. \code{theme_steve_font()} is
-#' for any purpose, allowing you to supply your own font.
+#' fonts that I like so much. \code{post_bg()} is a legacy function for changing the
+#' backgrounds on plots to better match what was the background color on my website.
+#' \code{theme_steve_ms()} is for \code{LaTeX} manuscripts that use the
+#' \code{cochineal} font package. \code{theme_steve_font()} is for any purpose,
+#' allowing you to supply your own font.
 #'
-#' @details \code{theme_steve_web()} depends on having the fonts installed on your end.
-#' It's ultimately optional for you to have them.
+#' @details \code{theme_steve_web()} and \code{theme_steve_ms()} both explicitly
+#' depend on having the fonts installed on your end. It's ultimately optional
+#' for you to have them but the use of these functions imply them. All functions
+#' that remain here should be understood as "legacy" functions that will no longer
+#' be maintained or updated. The \pkg{stevethemes} package will have all my
+#' \pkg{ggplot2} elements going forward.
 #'
 #' @return \code{post_bg()} takes a \pkg{ggplot2} plot and changes the background to have a color of
 #' "#fdfdfd". \code{theme_steve()} takes a \pkg{ggplot2} plot and formats it to approximate
 #' \code{theme_bw()} from \pkg{ggplot2}, but with some other tweaks. \code{theme_steve_web()} extends
 #' \code{theme_steve()} to add custom fonts, notably "Open Sans" and "Titillium Web". In all cases, these
 #' functions take a \pkg{ggplot2} plot and return another \pkg{ggplot2} plot, but with some cosmetic
-#' changes. \code{theme_steve_ms()} takes a \pkg{ggplot2} plot and overlays "Crimson Text" fonts, which is
+#' changes. \code{theme_steve_ms()} takes a \pkg{ggplot2} plot and overlays "Crimson Pro" fonts, which is
 #' the basis of the \code{cochineal} font package in \code{LaTeX}. \code{theme_steve_font()} takes a \pkg{ggplot2} plot and
 #' overlays a font of your choosing.
 #'
@@ -67,6 +72,7 @@
 #' @export
 
 theme_steve <- function(...) {
+  .Deprecated(package="stevethemes", msg = "This function is deprecated and will be removed in a future release.\nCheck the development of {stevethemes} (svmiller/stevethemes) for this function and more.")
   theme_bw() + theme(panel.border = element_blank(),
                      plot.margin = margin(15, 15, 15, 15),
                      plot.caption = element_text(hjust = 1,
@@ -202,19 +208,19 @@ theme_steve_ms <- function(axis_face = "italic", caption_face = "italic", ...) {
                                         face = caption_face),
             plot.title = element_text(hjust = 0, size = 18,
                                       margin = ggplot2::margin(b = 10),
-                                      face = "bold", family = "Crimson Text"),
+                                      face = "bold", family = "Crimson Pro"),
             plot.subtitle = element_text(hjust = 0,
                                          margin = ggplot2::margin(b = 10),
-                                         family = "Crimson Text"),
+                                         family = "Crimson Pro"),
             axis.title.y = element_text(size = 10, hjust = 1,
-                                        face = axis_face, family = "Crimson Text"),
+                                        face = axis_face, family = "Crimson Pro"),
             axis.title.x = element_text(hjust = 1, size = 10, face = axis_face,
-                                        family = "Crimson Text",
+                                        family = "Crimson Pro",
                                         margin = ggplot2::margin(t = 10)),
             legend.position = "bottom",
             legend.title = element_text(face = "bold",
-                                        family = "Crimson Text"),
-            text = element_text(family = "Crimson Text")) +
+                                        family = "Crimson Pro"),
+            text = element_text(family = "Crimson Pro")) +
       theme(legend.spacing.x = unit(.1, "cm"),
             panel.spacing = grid::unit(1.5, "lines"))
   }
@@ -227,19 +233,19 @@ theme_steve_ms <- function(axis_face = "italic", caption_face = "italic", ...) {
                                         face = caption_face),
             plot.title = element_text(hjust = 0, size = 18,
                                       margin = ggplot2::margin(b = 10),
-                                      face = "bold", family = "Crimson Text"),
+                                      face = "bold", family = "Crimson Pro"),
             plot.subtitle = element_text(hjust = 0,
                                          margin = ggplot2::margin(b = 10),
-                                         family = "Crimson Text"),
+                                         family = "Crimson Pro"),
             axis.title.y = element_text(size = 10, hjust = 1,
-                                        face = axis_face, family = "Crimson Text"),
+                                        face = axis_face, family = "Crimson Pro"),
             axis.title.x = element_text(hjust = 1, size = 10, face = axis_face,
-                                        family = "Crimson Text",
+                                        family = "Crimson Pro",
                                         margin = ggplot2::margin(t = 10)),
             legend.position = "bottom",
             legend.title = element_text(face = "bold",
-                                        family = "Crimson Text"),
-            text = element_text(family = "Crimson Text")) +
+                                        family = "Crimson Pro"),
+            text = element_text(family = "Crimson Pro")) +
       theme(legend.spacing.x = unit(.1, "cm"),
             panel.spacing = grid::unit(1.5, "lines"))
   }
