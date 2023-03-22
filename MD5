@@ -1,6 +1,6 @@
-d10d116d61534457843ddd4dcf8a184f *DESCRIPTION
-ebd8746ae6780b84fa199825d3bbc2cb *NAMESPACE
-8f126683c87d6fb79ad4bffe2e3cee92 *NEWS.md
+35c7c6c8e3c1800898407ccdd6187ca7 *DESCRIPTION
+c9c0ecd162262f0ae5bffe275b781d18 *NAMESPACE
+cf7ae95942daf5687823f9b7da8cd87d *NEWS.md
 44bdd7f8f38f47d23cf090fe4cbf5ba9 *R/at.R
 3e4ffc8437fd98599425b8a08804bf08 *R/binred_plot.R
 490af6d01db64c72ca64cdbec800bd0b *R/carrec.R
@@ -11,7 +11,7 @@ acb4bf2b232c2f53ddbd4602d588068b *R/cor2data.R
 7c27b9d47fdcd786e62ade0f9289d1cd *R/filter_refs.R
 72e0d88d5217a08e0041413398ebd72c *R/get_sims.R
 9a9647d0a0358af7217b3198100b2a64 *R/get_var_info.R
-71dcd0fbf445992f7b9e6c8220775eb2 *R/ggplot-themes.R
+007909153ce1ef9fa12e2b728b41358b *R/ggplot-themes.R
 d300e2eb77641e42b586f8063630766b *R/jenny.R
 b7da9ddf3384bcb28b1c93c8c613707e *R/linloess_plot.R
 ebe4e0a873d2e91ad445e1b6935cd620 *R/make_perclab.R
@@ -23,7 +23,7 @@ ef1b5c9ddcfaf8c0851cd20f946d8a0b *R/normal_dist.R
 fb205b102bc71e737744d6d0dac5feb1 *R/prepare_refs.R
 2c1c21ba5561bd17ec05a3cea44361bc *R/print_refs.R
 090be972c03f233d3ae4c4354e39d936 *R/ps_btscs.R
-e82eaa9772474fd977a34a00603dd3ec *R/ps_spells.R
+0c9157d05610ab8951cfb2ad678b5b96 *R/ps_spells.R
 48f050bae12512ba37d982fb4766c92a *R/r1sd.R
 4a220ad13ef61ceb5cc4bce8e7162c09 *R/r2sd.R
 2eb97642520e3a285e8190bcfa7594b6 *R/rbnorm.R
@@ -75,7 +75,7 @@ fa508b54ab1264139c6f719a7bce4d2f *man/figures/README-unnamed-chunk-19-1.png
 1486444ecba378b7d5b630a674161278 *man/fra_leaderyears.Rd
 b69b24062882986f35f4e839613b7f43 *man/get_sims.Rd
 7e62bf44068aece29c40ddfc6c3f721d *man/get_var_info.Rd
-ae8c0be2e64fe406bc9e4efcf99a019f *man/ggplot-themes.Rd
+212ca7029a61ce564b862e41e72a5be6 *man/ggplot-themes.Rd
 3928484c8a934bc673ba53044baad040 *man/gmy_dyadyears.Rd
 a0c392b605365d14e6afe2cd6d7cba75 *man/jenny.Rd
 2c8277a5bb49c04179710f5715c4907c *man/linloess_plot.Rd
@@ -89,7 +89,7 @@ bc66b0dd0ac14645b18b11411b87754e *man/p_z.Rd
 aa9e38b462dd77ef7fa0f37839011188 *man/prepare_refs.Rd
 147c3eed0e4604b2f75bc9c0275577f7 *man/print_refs.Rd
 8638c61739d5459497f6610ca724ecc3 *man/ps_btscs.Rd
-6b14da80a72eb10f9f2fbf356454cc61 *man/ps_spells.Rd
+a0251970fd3c30c1c756a06d814b7abf *man/ps_spells.Rd
 9658498d53ccbcd55af58876d9019e9b *man/r1sd.Rd
 ce528184a2eec9ab691c5d4e9823b787 *man/r2sd.Rd
 85d7d0545d04df5bd12f1760302439a6 *man/rbnorm.Rd
