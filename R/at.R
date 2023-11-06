@@ -13,7 +13,7 @@
 #' mean. It then renames these new variables to have a prefix of \code{c_}. The
 #' default prefix ("c") can be changed by way of an argument in the function.
 #'
-#' \code{diff_at} is a wrapper for \code{mutate_at} and \code{rename_at} from
+#' \code{diff_at} is a wrapper for \code{mutate} and \code{across} from
 #' \pkg{dplyr}. It takes supplied vectors and creates differences from the
 #' previous value recorded above it. It then renames these new variables to have
 #' a prefix of \code{d_} (in the case of a first difference), or something like
@@ -39,7 +39,7 @@
 #' defaults to 1). This default prefix ("l") can be changed by way of an
 #' another argument in the function.
 #'
-#' \code{log_at} is a wrapper for \code{mutate_at} and \code{rename_at} from
+#' \code{log_at} is a wrapper for \code{mutate} and \code{across} from
 #' \pkg{dplyr}. It takes supplied vectors and creates a variable that takes
 #' a natural logarithmic transformation of them. It then renames these new
 #' variables to have a prefix of \code{ln_}. This default prefix ("ln") can be
@@ -48,19 +48,19 @@
 #' which is a popular thing to do when positive reals have naturally occurring
 #' zeroes.
 #'
-#' \code{mean_at} is a wrapper for \code{mutate_at} and \code{rename_at} from
+#' \code{mean_at} is a wrapper for \code{mutate} and \code{across} from
 #' \pkg{dplyr}. It takes supplied vectors and creates a variable communicating
 #' the mean of the variable. It then renames these new variables to have a
 #' prefix of \code{mean_}. This default prefix ("mean") can be changed by way of
 #' an argument in the function.
 #'
-#' \code{r1sd_at} is a wrapper for \code{mutate_at} and \code{rename_at} from
+#' \code{r1sd_at} is a wrapper for \code{mutate} and \code{across} from
 #' \pkg{dplyr}. It both rescales the supplied vectors to new vectors and renames
 #' the vectors to each have a prefix of \code{s_}. Note the rescaling here is
 #' just by one standard deviation and not two. The default prefix ("s") can be
 #' changed by way of an argument in the function.
 #'
-#' \code{r2sd_at} is a wrapper for \code{mutate_at} and \code{rename_at} from
+#' \code{r2sd_at} is a wrapper for \code{mutate} and \code{across} from
 #' \pkg{dplyr}. It both rescales the supplied vectors to new vectors and renames
 #' the vectors to each have a prefix of \code{z_}. Note the rescaling here is by
 #' two standard deviations and not one. The default prefix ("z") can be
@@ -89,6 +89,12 @@
 #' variables prior to log transformation. If FALSE, performs logarithmic
 #' transformation on variables no matter whether 0 occurs (i.e. 0s will
 #' come back as -Inf). Defaults to FALSE.
+#' @param .by a selection of columns by which to group the operation. Defaults
+#' to NULL. This will eventually become a standard feature of the functions
+#' as this operator moves beyond the experimental in \pkg{dplyr}. The argument
+#' is not applicable to \code{log_at} (why would it be) and is optional for all
+#' functions except \code{group_mean_center_at}. \code{group_mean_center_at}
+#' must have something specified for grouped mean-centering.
 #'
 #' @return The function returns a set of new vectors in a data frame after
 #' performing relevant functions. The new vectors have distinct prefixes
@@ -120,13 +126,6 @@
 #'
 #' mean_at(Example, my_vars)
 #'
-#' group_mean_center_at(mean_at(Example, my_vars), my_vars)
-#' # ^ Alternatively, a better way:
-#' # Example %>%
-#' #   mean_at(my_vars) %>%
-#' #   group_by(category) %>%
-#' #   group_mean_center_at(my_vars)
-#'
 #' r1sd_at(Example, my_vars)
 #'
 #' r2sd_at(Example, my_vars)
@@ -136,17 +135,27 @@
 #' @export
 #'
 
-center_at <- function(data, x, prefix = "c", na=TRUE) {
+center_at <- function(data, x, prefix = "c", na=TRUE, .by=NULL) {
+
+  by <- enquo(.by)
 
   if(length(x) == 1) {
     stop("The use of a scoped helper verb like this requires more than one variable.")
   }
 
+  # data %>%
+  #   mutate_at(vars(all_of(x)),
+  #             list(tmp = ~. - mean(., na = na))) %>%
+  #   rename_at(vars(contains("_tmp")),
+  #             ~paste(prefix, gsub("_tmp", "", .), sep = "_") ) -> data
+
+
   data %>%
-    mutate_at(vars(all_of(x)),
-              list(tmp = ~. - mean(., na = na))) %>%
-    rename_at(vars(contains("_tmp")),
-              ~paste(prefix, gsub("_tmp", "", .), sep = "_") ) -> data
+    mutate(across(all_of(x),
+                  ~(.) - mean(., na = na),
+                  .names = paste0(prefix,"_{.col}")),
+           .by = !!by) -> data
+
   return(data)
 
 }
@@ -157,7 +166,9 @@ center_at <- function(data, x, prefix = "c", na=TRUE) {
 #' @export
 #'
 
-diff_at <- function(data, x, o=1, prefix = "d") {
+diff_at <- function(data, x, o=1, prefix = "d", .by = NULL) {
+
+  by <- enquo(.by)
 
   if(length(x) == 1) {
     stop("The use of a scoped helper verb like this requires more than one variable.")
@@ -169,11 +180,19 @@ diff_at <- function(data, x, o=1, prefix = "d") {
     prefixx <- paste0(prefix,o)
   }
 
+  # data %>%
+  #   mutate_at(vars(all_of(x)),
+  #             list(tmp = ~(.) - lag(., o))) %>%
+  #   rename_at(vars(contains("_tmp")),
+  #             ~paste(prefixx, gsub("_tmp", "", .), sep = "_") ) -> data
+
   data %>%
-    mutate_at(vars(all_of(x)),
-              list(tmp = ~(.) - lag(., o))) %>%
-    rename_at(vars(contains("_tmp")),
-              ~paste(prefixx, gsub("_tmp", "", .), sep = "_") ) -> data
+    mutate(across(all_of(x),
+                  ~(.) - lag(., o),
+                  .names = paste0(prefixx,"_{.col}")),
+           .by = !!by) -> data
+
+
   return(data)
 
 }
@@ -185,7 +204,9 @@ diff_at <- function(data, x, o=1, prefix = "d") {
 #'
 
 group_mean_center_at <- function(data, x, mean_prefix = "mean",
-                                 prefix = "b", na = TRUE) {
+                                 prefix = "b", na = TRUE, .by) {
+
+  by <- enquo(.by)
 
   are_means_there <- paste0(mean_prefix,"_", x)
 
@@ -197,9 +218,9 @@ group_mean_center_at <- function(data, x, mean_prefix = "mean",
     stop("The use of a scoped helper verb like this requires more than one variable.")
   }
 
-  if(is.grouped_df(data) == FALSE) {
-   warning("The absence of a grouping factor means you're going to be subtracting a mean from itself. It's up to you if you want to do that. You probably didn't want that, but I did it anyway. I'm just bringing that to your attention.")
-  }
+  # if(is.grouped_df(data) == FALSE) {
+  #   warning("The absence of a grouping factor means you're going to be subtracting a mean from itself. It's up to you if you want to do that. You probably didn't want that, but I did it anyway. I'm just bringing that to your attention.")
+  # }
 
   mp <- paste0(mean_prefix, "_")
   nvp <- paste0(prefix,"_{.col}")
@@ -207,14 +228,15 @@ group_mean_center_at <- function(data, x, mean_prefix = "mean",
 
   data %>%
     mutate(across(all_of(x), ~
-                    mean(., na.rm=T) - get(str_c(mp, cur_column())), .names = nvp)) -> data
+                    mean(., na.rm=T) - get(str_c(mp, cur_column())), .names = nvp),
+           .by = !!by) -> data
 
-  data %>%
-    filter_at(nvp_check, ~. != 0) -> check_this
-
-  if(nrow(check_this) == 0) {
-    warning("The ensuing output for these variables you created are all 0, indicating you subtracted a thing from a different version of itself in this function. Are you sure these mean variables aren't themselves actually group means? Check your code more carefully.")
-  }
+  # data %>%
+  #   filter_at(nvp_check, ~. != 0) -> check_this
+  #
+  # if(nrow(check_this) == 0) {
+  #   warning("The ensuing output for these variables you created are all 0, indicating you subtracted a thing from a different version of itself in this function. Are you sure these mean variables aren't themselves actually group means? Check your code more carefully.")
+  # }
 
   return(data)
 
@@ -224,7 +246,9 @@ group_mean_center_at <- function(data, x, mean_prefix = "mean",
 #' @export
 #'
 
-lag_at <- function(data, x, prefix = "l", o=1) {
+lag_at <- function(data, x, prefix = "l", o=1, .by=NULL) {
+
+  by <- enquo(.by)
 
   # https://gist.github.com/RJHKnight/22dbe5a3ef1d2701afd48370a1f1742c
   lag_fn <- list()
@@ -245,7 +269,9 @@ lag_at <- function(data, x, prefix = "l", o=1) {
 
 
   data %>%
-    mutate(across(all_of(x), lag_fn, .names = paste0(prefix,"{.fn}_{.col}"))) -> data
+    mutate(across(all_of(x), lag_fn,
+                  .names = paste0(prefix,"{.fn}_{.col}")),
+           .by = !!by) -> data
 
   return(data)
 }
@@ -283,17 +309,26 @@ log_at <- function(data, x, prefix = "ln", plus_1 = FALSE) {
 #' @export
 #'
 
-mean_at <- function(data, x, prefix = "mean", na=TRUE) {
+mean_at <- function(data, x, prefix = "mean", na=TRUE, .by=NULL) {
+
+  by <- enquo(.by)
 
   if(length(x) == 1) {
     stop("The use of a scoped helper verb like this requires more than one variable.")
   }
 
+  # data %>%
+  #   mutate_at(vars(all_of(x)),
+  #             list(tmp = ~mean(., na = na))) %>%
+  #   rename_at(vars(contains("_tmp")),
+  #             ~paste(prefix, gsub("_tmp", "", .), sep = "_") ) -> data
+
   data %>%
-    mutate_at(vars(all_of(x)),
-              list(tmp = ~mean(., na = na))) %>%
-    rename_at(vars(contains("_tmp")),
-              ~paste(prefix, gsub("_tmp", "", .), sep = "_") ) -> data
+    mutate(across(all_of(x),
+                  ~mean(., na = na),
+                  .names = paste0(prefix,"_{.col}")),
+           .by = !!by) -> data
+
   return(data)
 
 }
@@ -304,17 +339,26 @@ mean_at <- function(data, x, prefix = "mean", na=TRUE) {
 #' @export
 #'
 
-r1sd_at <- function(data, x, prefix = "s", na=TRUE) {
+r1sd_at <- function(data, x, prefix = "s", na=TRUE, .by=NULL) {
+
+  by <- enquo(.by)
 
   if(length(x) == 1) {
     stop("The use of a scoped helper verb like this requires more than one variable.")
   }
 
+  # data %>%
+  #   mutate_at(vars(all_of(x)),
+  #             list(tmp = ~r1sd(., na=na))) %>%
+  #   rename_at(vars(contains("_tmp")),
+  #             ~paste(prefix, gsub("_tmp", "", .), sep = "_") ) -> data
+
   data %>%
-    mutate_at(vars(all_of(x)),
-              list(tmp = ~r1sd(., na=na))) %>%
-    rename_at(vars(contains("_tmp")),
-              ~paste(prefix, gsub("_tmp", "", .), sep = "_") ) -> data
+    mutate(across(all_of(x),
+                  ~r1sd(., na = na),
+                  .names = paste0(prefix,"_{.col}")),
+           .by = !!by) -> data
+
   return(data)
 
 }
@@ -323,17 +367,27 @@ r1sd_at <- function(data, x, prefix = "s", na=TRUE) {
 #' @export
 #'
 
-r2sd_at <- function(data, x, prefix = "z", na=TRUE) {
+r2sd_at <- function(data, x, prefix = "z", na=TRUE, .by=NULL) {
+
+  by <- enquo(.by)
 
   if(length(x) == 1) {
     stop("The use of a scoped helper verb like this requires more than one variable.")
   }
 
+  # data %>%
+  #   mutate_at(vars(all_of(x)),
+  #             list(tmp = ~r2sd(., na=na))) %>%
+  #   rename_at(vars(contains("_tmp")),
+  #             ~paste(prefix, gsub("_tmp", "", .), sep = "_") ) -> data
+
   data %>%
-    mutate_at(vars(all_of(x)),
-              list(tmp = ~r2sd(., na=na))) %>%
-    rename_at(vars(contains("_tmp")),
-              ~paste(prefix, gsub("_tmp", "", .), sep = "_") ) -> data
+    mutate(across(all_of(x),
+                  ~r2sd(., na = na),
+                  .names = paste0(prefix,"_{.col}")),
+           .by = !!by) -> data
+
+
   return(data)
 
 }
