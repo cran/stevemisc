@@ -1,3 +1,9 @@
+# stevemisc 1.9.0
+
+- `rewb_at()` is a convenience wrapper for `mean_at()`, `group_mean_center_at()`, and `center_at()`. It's useful for preparing data for a random effects, within-between (REWB) panel analysis.
+- `linloess_plot()` now has a special print class for suppressing warnings that come from the LOESS smoother. Additionally, there is are `suppress_warnings` and `no_dummies` arguments in this function.
+- `print_refs()` now has a `scrub_bibitem` argument when converting to LaTeX.
+
 # stevemisc 1.8.0
 
 - `rd_plot()` now has an `na.rm = TRUE` argument quietly passed to the extraction of the standard deviation of the residuals. This ensures that missing values in the data don't result in missing residuals, which then result in no standard deviation of the residuals.

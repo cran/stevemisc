@@ -2,7 +2,8 @@
 % Please edit documentation in R/linloess_plot.R
 \name{linloess_plot}
 \alias{linloess_plot}
-\title{Compare Linear Smoother to LOESS Smoother for Your OLS Model}
+\alias{print.linloess}
+\title{Compare Linear Smoother to LOESS Smoother for Your Linear Model}
 \usage{
 linloess_plot(
   mod,
@@ -10,11 +11,15 @@ linloess_plot(
   smoother = "loess",
   se = TRUE,
   span = 0.75,
+  no_dummies = FALSE,
+  suppress_warning = TRUE,
   ...
 )
+
+\method{print}{linloess}(x, ...)
 }
 \arguments{
-\item{mod}{a fitted OLS model}
+\item{mod}{a fitted model, ideally a simple linear model}
 
 \item{resid}{logical, defaults to \code{TRUE}. If \code{FALSE}, the y-axis
 on these plots are the raw values of the dependent variable. If \code{TRUE},
@@ -25,15 +30,25 @@ at hand, provided you treat the output here as illustrative or suggestive.}
 for the non-linear smoother.}
 
 \item{se}{logical, defaults to \code{TRUE}. If \code{TRUE}, gives standard
-error estimates with the assorted smoothers.}
+error estimates with the assorted smoothers. If \code{resid} is \code{TRUE},
+there is no standard error for a flat line at 0.}
 
 \item{span}{a numeric, defaults to .75. An adjustment to the smoother. Higher
 values permit smoother lines and might be warranted in the presence of
 sparse pockets of the data.}
 
-\item{...}{optional parameters, passed to the scatterplot
-(\code{geom_point()}) component of this function. Useful if you want to make
-the smoothers more legible against the points.}
+\item{no_dummies}{logical, defaults to \code{FALSE}. If \code{TRUE}, removes
+binary independent variables from the plot. If \code{FALSE}, facets appear for
+binary independent variables. You should probably just set this to \code{TRUE}
+for your own use cases.}
+
+\item{suppress_warning}{logical, defaults to \code{TRUE}. If \code{TRUE},
+the plot suppresses assorted warnings from the LOESS smoother that would
+otherwise be cautioning you about things your eyes could otherwise see.}
+
+\item{...}{Additional arguments (passed to the scatterplot in \code{linloess_plot()}, not used in the print function}
+
+\item{x}{a ggplot object with this special 'linloess' class}
 }
 \value{
 \code{linloess_plot()} returns a faceted scatterplot as a
@@ -41,18 +56,18 @@ the smoothers more legible against the points.}
 standard error bands) and the LOESS smoother is a dashed black line (with
 gray/default standard error bands). You can add cosmetic features to it after
 the fact. The function may spit warnings to you related to the LOESS smoother,
-depending your data. I think these to be fine the extent to which this is
-really just a visual aid and an informal diagnostic for the linearity
-assumption.
+depending your data and whether you have disabled the warnings in the
+function. I think these to be fine the extent to which this is really just a
+visual aid and an informal diagnostic for the linearity assumption.
 }
 \description{
 \code{linloess_plot()} provides a visual diagnostic of the
-linearity assumption of the OLS model. Provided an OLS model fit by
+linearity assumption of the OLS model. Provided a linear model fit by
 \code{lm()} in base R, the function extracts the model frame and creates a
 faceted scatterplot. For each facet, a linear smoother and LOESS smoother
 are estimated over the points. Users who run this function can assess just
 how much the linear smoother and LOESS smoother diverge. The more they
-diverge, the more the user can determine how much the OLS model is a good
+diverge, the more the user can determine how much the linear model is a good
 fit as specified. The plot will also point to potential outliers that may
 need further consideration.
 }
@@ -65,11 +80,13 @@ disable the standard error bands for particularly ill-fitting linear models.
 }
 \examples{
 
-M1 <- lm(mpg ~ ., data=mtcars)
+M1 <- lm(mpg ~ am + carb + disp, data=mtcars)
 
 linloess_plot(M1)
 linloess_plot(M1, color="black", pch=21)
+
 }
 \author{
 Steven V. Miller
 }
+\keyword{internal}
